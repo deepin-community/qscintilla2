@@ -1,0 +1,23 @@
+From: "Gudjon I. Gudjonsson" <gudjon@gudjon.org>
+Date: Thu, 21 Feb 2019 19:31:17 +0100
+Subject: Add a patch to fix symbols failure in designer
+
+---
+ designer-Qt4Qt5/designer.pro | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/designer-Qt4Qt5/designer.pro b/designer-Qt4Qt5/designer.pro
+index 504c14b..745dcea 100644
+--- a/designer-Qt4Qt5/designer.pro
++++ b/designer-Qt4Qt5/designer.pro
+@@ -11,8 +11,10 @@ greaterThan(QT_MAJOR_VERSION, 4) {
+ 
+     # Work around QTBUG-39300.
+     CONFIG -= android_install
++    LIBS += -lqscintilla2_qt5
+ } else {
+     CONFIG += designer
++    LIBS += -lqscintilla2_qt4
+ }
+ 
+ HEADERS = qscintillaplugin.h

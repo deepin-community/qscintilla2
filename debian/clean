@@ -1,0 +1,6 @@
+*-stamp
+Python/*build*/
+Python/__pycache__/
+QSciQt5/
+designer-Qt5/
+doc/html-Qt4Qt5/

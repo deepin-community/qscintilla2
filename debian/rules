@@ -1,0 +1,78 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+#export DPKG_GENSYMBOLS_CHECK_LEVEL=0
+
+include /usr/share/dpkg/default.mk
+
+QMAKE_FLAGS = QMAKE_CXXFLAGS+="$(CXXFLAGS) $(CPPFLAGS)" QMAKE_LFLAGS+="$(LDFLAGS)" QMAKE_STRIP=
+
+PYTHON3S := $(shell py3versions -vr debian/control)
+PYTHONS := $(PYTHON3S)
+
+%:
+	dh $@ --with pkgkde_symbolshelper,python3
+
+configure-stamp:
+	dh_testdir
+	# Configuring for Qt5 support
+	mkdir -p QSciQt5
+	cp -r Qt4Qt5/* QSciQt5
+	cd QSciQt5 && $(DEB_HOST_GNU_TYPE)-qmake DESTDIR=../QSciQt5 $(QMAKE_FLAGS)
+	cp -r designer-Qt4Qt5 designer-Qt5
+	cd designer-Qt5 && $(DEB_HOST_GNU_TYPE)-qmake INCLUDEPATH+=../Qt4Qt5 QMAKE_LIBDIR+=../QSciQt5 DESTDIR=../designer-Qt5 $(QMAKE_FLAGS)
+	touch $@
+
+override_dh_auto_configure: configure-stamp
+
+Python/build-%/configure-stamp: build-library-stamp
+	dh_testdir
+	mkdir -p Python/build-$*
+	python$* /usr/bin/sip-build \
+		--verbose --no-make --pep484-pyi \
+		--qmake /usr/bin/$(DEB_HOST_GNU_TYPE)-qmake \
+		--qmake-setting 'QMAKE_CXXFLAGS += "$(CXXFLAGS) $(CPPFLAGS)"' \
+		--qmake-setting 'QMAKE_LFLAGS += "$(LDFLAGS)"' \
+		--target-dir /usr/lib/python3/dist-packages \
+		--build-dir Python/build-$* \
+		--api-dir /usr/share/qt5/api/python3 \
+		--qsci-features-dir $(CURDIR)/Qt4Qt5/features \
+		--qsci-include-dir $(CURDIR)/QSciQt5 \
+		--qsci-library-dir $(CURDIR)/QSciQt5
+	touch $@
+
+
+build-library-stamp: configure-stamp
+	dh_testdir
+	cd QSciQt5 && $(MAKE)
+	cd designer-Qt5 && $(MAKE)
+	touch $@
+
+Python/build-%/build-stamp: Python/build-%/configure-stamp
+	dh_testdir
+	$(MAKE) -C Python/build-$*
+	touch $@
+
+override_dh_auto_build: build-library-stamp $(PYTHONS:%=Python/build-%/build-stamp)
+
+execute_after_dh_auto_build-indep:
+	cd doc && doxygen qscintilla.dxy
+
+override_dh_auto_install:
+	$(MAKE) -C QSciQt5 install INSTALL_ROOT=$(CURDIR)/debian/tmp
+	$(MAKE) -C designer-Qt5 install INSTALL_ROOT=$(CURDIR)/debian/libqscintilla2-qt5-designer
+	set -ex; for p in $(PYTHONS); do \
+		$(MAKE) -C Python/build-$$p install INSTALL_ROOT=$(CURDIR)/debian/tmp; \
+	done
+
+override_dh_installdocs:
+	dh_installdocs -A NEWS
+
+execute_after_dh_installdocs-indep:
+	dh_doxygen
+
+override_dh_strip:
+	dh_strip -ppython3-pyqt5.qsci --dbgsym-migration='python3-pyqt5.qsci-dbg (<< 2.11.6+dfsg-3~)'
+	dh_strip --remaining-packages
