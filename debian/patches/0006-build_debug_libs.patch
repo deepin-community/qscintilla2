@@ -5,33 +5,19 @@ Subject: build_debug_libs
 Build libs and designer plugin with debug for -dbg packages
 Patch-Name: build_debug_libs.patch
 ---
- Qt4Qt5/qscintilla.pro        | 2 +-
- designer-Qt4Qt5/designer.pro | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ designer/designer.pro | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Qt4Qt5/qscintilla.pro b/Qt4Qt5/qscintilla.pro
-index 856854e..f769778 100644
---- a/Qt4Qt5/qscintilla.pro
-+++ b/Qt4Qt5/qscintilla.pro
-@@ -21,7 +21,7 @@
- !win32:VERSION = 15.0.0
- 
- TEMPLATE = lib
--CONFIG += qt warn_off thread exceptions hide_symbols
-+CONFIG += qt warn_off thread exceptions debug
- 
- CONFIG(debug, debug|release) {
-     mac: {
-diff --git a/designer-Qt4Qt5/designer.pro b/designer-Qt4Qt5/designer.pro
-index f03d3b3..504c14b 100644
---- a/designer-Qt4Qt5/designer.pro
-+++ b/designer-Qt4Qt5/designer.pro
-@@ -4,7 +4,7 @@
- TEMPLATE = lib
- TARGET = qscintillaplugin
+diff --git a/designer/designer.pro b/designer/designer.pro
+index f238460..2021a3d 100644
+--- a/designer/designer.pro
++++ b/designer/designer.pro
+@@ -8,7 +8,7 @@ TARGET = qscintillaplugin
+ # on macOS.
+ #QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
  
 -CONFIG += plugin qscintilla2
 +CONFIG += plugin qscintilla2 debug
  
- greaterThan(QT_MAJOR_VERSION, 4) {
-     QT += designer
+ QT += designer
+ 
