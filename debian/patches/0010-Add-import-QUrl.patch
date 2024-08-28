@@ -3,14 +3,14 @@ Date: Mon, 26 Aug 2019 06:49:17 +0200
 Subject: Add import QUrl
 
 ---
- Qt4Qt5/Qsci/qsciscintilla.h     | 1 +
- Qt4Qt5/Qsci/qsciscintillabase.h | 1 +
+ src/Qsci/qsciscintilla.h     | 1 +
+ src/Qsci/qsciscintillabase.h | 1 +
  2 files changed, 2 insertions(+)
 
-diff --git a/Qt4Qt5/Qsci/qsciscintilla.h b/Qt4Qt5/Qsci/qsciscintilla.h
-index e06d360..495c5db 100644
---- a/Qt4Qt5/Qsci/qsciscintilla.h
-+++ b/Qt4Qt5/Qsci/qsciscintilla.h
+diff --git a/src/Qsci/qsciscintilla.h b/src/Qsci/qsciscintilla.h
+index c8f1eee..31a5529 100644
+--- a/src/Qsci/qsciscintilla.h
++++ b/src/Qsci/qsciscintilla.h
 @@ -22,6 +22,7 @@
  #ifndef QSCISCINTILLA_H
  #define QSCISCINTILLA_H
@@ -19,10 +19,10 @@ index e06d360..495c5db 100644
  #include <QByteArray>
  #include <QList>
  #include <QObject>
-diff --git a/Qt4Qt5/Qsci/qsciscintillabase.h b/Qt4Qt5/Qsci/qsciscintillabase.h
-index d0bd631..7732bac 100644
---- a/Qt4Qt5/Qsci/qsciscintillabase.h
-+++ b/Qt4Qt5/Qsci/qsciscintillabase.h
+diff --git a/src/Qsci/qsciscintillabase.h b/src/Qsci/qsciscintillabase.h
+index a253b11..1b1f8b6 100644
+--- a/src/Qsci/qsciscintillabase.h
++++ b/src/Qsci/qsciscintillabase.h
 @@ -23,6 +23,7 @@
  
  #include <qglobal.h>

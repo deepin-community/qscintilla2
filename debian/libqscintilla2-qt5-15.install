@@ -1,1 +1,1 @@
-usr/lib/libqscintilla2_qt5.so.*
+usr/lib/${DEB_HOST_MULTIARCH}/libqscintilla2_qt5.so.*
